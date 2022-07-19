@@ -1,10 +1,8 @@
 package ru.ilya.myProject;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
-public class Calc {
+public class Main {
     private static RomanNumbConvertor romanNumbConvertor = new RomanNumbConvertor();
     private static int intFirstNumb;
     private static int intSecondNumb;
