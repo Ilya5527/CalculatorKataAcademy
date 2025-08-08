@@ -1,13 +1,9 @@
 package ru.ilya.myProject;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class RomanNumbConvertor {
-
-    private static String result;
-    private static boolean isRomanNumb = true;
 
     static Map<String, Integer> roman = new HashMap<>() {{
         put("I", 1);put("XXI", 21);put("XLI", 41);put("LXI", 61);put("LXXXI", 81);
@@ -25,7 +21,7 @@ public class RomanNumbConvertor {
         put("XIII", 13);put("XXXIII", 33);put("LIII", 53);put("LXXIII", 73);put("XCIII", 93);
         put("XIV", 14);put("XXXIV", 34);put("LIV", 54);put("LXXIV", 74);put("XCIV", 94);
         put("XV", 15);put("XXXV", 35);put("LV", 55);put("LXXV", 75);put("XCV", 95);
-        put("XVI", 16);put("XXXVI", 3);put("LVI", 56);put("LXXVI", 76);put("XCVI", 96);
+        put("XVI", 16);put("XXXVI", 36);put("LVI", 56);put("LXXVI", 76);put("XCVI", 96);
         put("XVII", 17);put("XXXVII", 37);put("LVII", 57);put("LXXVII", 77);put("XCVII", 97);
         put("XVIII", 18);put("XXXVIII", 38);put("LVIII", 58);put("LXXVIII", 78);put("XCVIII", 98);
         put("XIX", 19);put("XXXIX", 39);put("LIX", 59);put("LXXIX", 79);put("XCIX", 99);
@@ -33,50 +29,39 @@ public class RomanNumbConvertor {
     }};
 
     public boolean isRoman(String firstNumb, String secondNumb){
-
-        if (roman.get(firstNumb) == null && roman.get(secondNumb) == null){
-            isRomanNumb = false;
-        } else if (roman.get(firstNumb) == null || roman.get(secondNumb) == null){
-            try {
-                throw new Exception("используются одновременно разные системы счисления");
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
-            }
+        boolean bothRomanKnown = roman.get(firstNumb) != null && roman.get(secondNumb) != null;
+        if (bothRomanKnown) {
+            return true;
         }
-        return isRomanNumb;
+        boolean oneIsRoman = (roman.get(firstNumb) != null) ^ (roman.get(secondNumb) != null);
+        if (oneIsRoman) {
+            throw new RuntimeException("используются одновременно разные системы счисления");
+        }
+        return false;
     }
 
     public int convertInRomanToArab(String numbOfConvert){
-        return roman.get(numbOfConvert);
+        Integer value = roman.get(numbOfConvert);
+        if (value == null) {
+            throw new RuntimeException("строка не является допустимым римским числом в диапазоне I..C");
+        }
+        return value;
     }
 
     public String convertInArabToRoman(Integer numbOfConvert){
-
         if (numbOfConvert < 1){
-            try {
-                throw new Exception("в римской системе нет отрицательных чисел");
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
-            }
-        } else {
-            Iterator it = roman.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
-                if (pair.getValue() == numbOfConvert) {
-                    result = (String)pair.getKey();
-                }
-                it.remove(); // дабы не было ConcurrentModificationException
-            }
+            throw new RuntimeException("в римской системе нет отрицательных чисел");
         }
-
-        if (result == null){
-            try {
-                throw new Exception("Чилса можно использовать в диапозоне от I до X!");
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
-            }
+        if (numbOfConvert > 100) {
+            throw new RuntimeException("Число вне допустимого диапазона для конвертации (I..C)");
         }
-
-        return result;
+        if (numbOfConvert == 100) {
+            return "C";
+        }
+        String[] tens = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+        String[] ones = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+        int t = numbOfConvert / 10;
+        int o = numbOfConvert % 10;
+        return tens[t] + ones[o];
     }
 }

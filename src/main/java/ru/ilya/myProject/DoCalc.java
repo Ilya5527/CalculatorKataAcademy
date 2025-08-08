@@ -1,9 +1,8 @@
 package ru.ilya.myProject;
 
 public class DoCalc {
-    private static String result;
-    private static int number;
     public String doCalc(boolean isRoman, String operation, int firstNumb, int secondNumb){
+        int number;
 
         if (operation.equals("+")){
             number = firstNumb + secondNumb;
@@ -14,21 +13,13 @@ public class DoCalc {
         } else if (operation.equals("/")) {
             number = firstNumb / secondNumb;
         } else {
-            try {
-                throw new Exception("Вводить можно только следующие операторы: +, -, *, /" +
-                        "\n" +
-                        "Пожалуйста, введите именно их!");
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
-            }
+            throw new RuntimeException("Вводить можно только следующие операторы: +, -, *, /\nПожалуйста, введите именно их!");
         }
 
-        if (isRoman == true){
-            result = new RomanNumbConvertor().convertInArabToRoman(number);
+        if (isRoman){
+            return new RomanNumbConvertor().convertInArabToRoman(number);
         } else {
-            result = String.valueOf(number);
+            return String.valueOf(number);
         }
-
-        return result;
     }
 }

@@ -15,8 +15,9 @@ public class Main {
         System.out.println("Пожалуйста, введите свое выражение:" +
                 "\n" +
                 "(Выражение вводится в формате: 1 + 2/I + IV)");
-        Scanner scanner = new Scanner(System.in);
-        calc(scanner.nextLine());
+        try (Scanner scanner = new Scanner(System.in)) {
+            calc(scanner.nextLine());
+        }
     }
 
     public static String calc(String input){
@@ -61,8 +62,6 @@ public class Main {
             }
 
         }
-
-
 
         result = new DoCalc().doCalc(isRoman, operation, intFirstNumb, intSecondNumb);
         System.out.println(result);
