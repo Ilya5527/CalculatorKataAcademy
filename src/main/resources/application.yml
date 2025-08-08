@@ -26,7 +26,18 @@ app:
         connection-timeout: 30000
         max-lifetime: 1800000
         validation-timeout: 5000
+  cache:
+    ignite:
+      enabled: ${IGNITE_ENABLED:true}
+      cluster-name: ${IGNITE_CLUSTER_NAME:ignite-cluster}
+      addresses: ${IGNITE_ADDRESSES:127.0.0.1:47500..47509}
+      cache-names:
+        - sampleCache
+      discovery-join-timeout-ms: ${IGNITE_JOIN_TIMEOUT_MS:3000}
+      network-timeout-ms: ${IGNITE_NETWORK_TIMEOUT_MS:5000}
+      failure-detection-timeout-ms: ${IGNITE_FAILURE_DETECTION_MS:5000}
 logging:
   level:
     com.zaxxer.hikari: INFO
     org.springframework.jdbc.core: INFO
+    org.apache.ignite: WARN
